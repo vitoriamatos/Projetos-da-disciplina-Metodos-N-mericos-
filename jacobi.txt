@@ -1,0 +1,79 @@
+package MetodosNumericos;
+
+import static java.lang.Math.sqrt;
+import java.util.Scanner;
+
+public class Jacobi {
+
+    public static void main(String[] args) {
+
+          Scanner sc = new Scanner(System.in);        
+        double x[], x0[], A[][], b[], modx=0, modx0=0, soma;
+        double tol;
+        int i, j, k, c=0, n;
+        
+        System.out.println("***METODO DE JACOBI***");
+
+        //recebe o número de incógnitas do sistema
+        System.out.println("-->Qual a ordem da matriz?");
+        n=sc.nextInt();
+        x=new double[n];
+        x0=new double[n];
+        A=new double[n][n];
+        b=new double[n];    
+        
+        
+        //recebe a tolerância
+        System.out.println("-->Qual o tolerancia?(eps) ");
+        tol=sc.nextDouble();
+        //recebe os dados da matriz A
+        for(i=0; i<n; i++){
+            for(j=0; j<n; j++){
+                 System.out.println("matriz [" + i + "][" + j + "] =");
+                A[i][j]=sc.nextDouble();
+            }
+        }
+        //recebe os dados do vetor b
+        System.out.println("-->Informe os valores para o vetor b");
+        for(i=0; i<n; i++){
+            System.out.println("vetor na posição["+i+"]");
+            b[i]=sc.nextDouble();
+        }
+        //recebe os dados do vetor x0
+        System.out.println("-->Informe os dados do vetor x0");
+        for(i=0; i<n; i++){
+            x0[i]=sc.nextDouble();  
+        }
+        //obtém os valores de x
+        while(true){
+            c++;
+            System.out.print("iteração "+c+" :");
+            for(i=0; i<n; i++){
+                soma=0;
+                for(j=0; j<n; j++){
+        
+                    if(j!=i)
+                        soma=soma+A[i][j]*x0[j];
+                }
+                x[i]=(b[i]-soma)/A[i][i];                
+            }
+            for(k=0; k<n; k++)
+                    System.out.print("x"+(k+1)+" = "+x[k]+"; ");
+            //obtém a norma dos vetores x0 e x
+            for(i=0; i<n; i++){
+                modx=modx+Math.pow(x[i], 2);
+                modx0=modx0+Math.pow(x0[i], 2);
+            }
+            modx=sqrt(modx);
+            modx0=sqrt(modx0);
+            System.out.println("|x-x0| = "+Math.abs(modx-modx0));
+            if (Math.abs(modx-modx0)<=tol)
+                break;                     
+            else{                         
+                for(i=0; i<n; i++)         
+                    x0[i]=x[i];
+            }
+        }
+        System.out.println("número de iterações = "+c);
+    }    
+}
